@@ -192,19 +192,18 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private void createBuffers(int width, int height) {
         Log.i(TAG, "createBuffers = " + width + " x " + height);
         if (mScreenWidth > 0 && mScreenHeight > 0) {
-            float f1 = 4f;
-            float f2 = 3f;
-            Log.i(TAG, "f1 = " + f1 + " f2 = " + f2);
-            if (f1 == f2) {
-                mProgram.createBuffers(MyGLProgram.squareVertices);
-            } else if (f1 < f2) {
-                float widthScale = f1 / f2;
-                float[] vert = {-widthScale, -1.0f, widthScale, -1.0f, -widthScale, 1.0f, widthScale, 1.0f};
-                mProgram.createBuffers(vert);
+            if (mScreenWidth > width && mScreenHeight > height) {
+                if (width > height) {
+                    float widthScale = (float)width / (float)height;
+                    float[] vert = {-widthScale, -1.0f, widthScale, -1.0f, -widthScale, 1.0f, widthScale, 1.0f};
+                    mProgram.createBuffers(vert);
+                } else {
+                    float heightScale = (float)height / (float)width;
+                    float[] vert = {-1.0f, -heightScale, 1.0f, -heightScale, -1.0f, heightScale, 1.0f, heightScale};
+                    mProgram.createBuffers(vert);
+                }
             } else {
-                float heightScale = f2 / f1;
-                float[] vert = {-1.0f, -heightScale, 1.0f, -heightScale, -1.0f, heightScale, 1.0f, heightScale};
-                mProgram.createBuffers(vert);
+                Log.i(TAG, "not implemented");
             }
         } else {
             Log.i(TAG, "not createBuffers = " + mScreenWidth + " x " + mScreenWidth);
