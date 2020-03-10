@@ -26,6 +26,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.javacodegeeks.glcomponent.MyGLSurfaceView;
+
 public class AndroidCameraExample extends Activity implements CameraPreview.CameraFrameCallback, SurfaceHolder.Callback {
 	private Camera mCamera;
 	private CameraPreview mPreview;
@@ -38,6 +40,7 @@ public class AndroidCameraExample extends Activity implements CameraPreview.Came
 
 	private SurfaceView mRenderView;
 	private RenderThread renderThread = null;
+	private MyGLSurfaceView glSurfaceView = null;
 
 	private int cameraId = -1;
 
@@ -131,6 +134,10 @@ public class AndroidCameraExample extends Activity implements CameraPreview.Came
 
 		switchCamera = (Button) findViewById(R.id.button_ChangeCamera);
 		switchCamera.setOnClickListener(switchCameraListener);
+
+		glSurfaceView = (MyGLSurfaceView) findViewById(R.id.gl_preview);
+		glSurfaceView.setYuvDataSize(TARGET_WIDTH, TARGET_HEIGHT);
+		glSurfaceView.setDisplayOrientation(90);
 
 //		startRenderThread();
 	}
@@ -280,6 +287,8 @@ public class AndroidCameraExample extends Activity implements CameraPreview.Came
         if (null != renderThread && renderThread.isRunning()) {
             renderThread.insertQueue(frame);
         }
+
+		glSurfaceView.feedData(frame, 2);
     }
 
 	@Override
